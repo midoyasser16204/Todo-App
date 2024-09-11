@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -12,7 +11,7 @@ import com.example.myapplication.databinding.FragmentAddBinding
 
 class AddFragment : Fragment() {
     private lateinit var binding: FragmentAddBinding
-    private val viewModel:ViewModel by activityViewModels()
+    private val viewModel: ViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,20 +23,21 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.btnSave.setOnClickListener {
             val title = binding.title.text.toString()
             val description = binding.description.text.toString()
             if (title.isNotEmpty() && description.isNotEmpty()) {
-                findNavController().navigate(R.id.listFragment, bundleOf(
-                    "title" to title,
-                    "description" to description))
+                viewModel.insert(UserData(title = title, description = description))
+                findNavController().navigateUp()
             }
             else {
                 binding.title.error = "Please enter a title"
-                binding.description.error = "please enter a description"
+                binding.description.error = "Please enter a description"
             }
         }
-        binding.closeImg.setOnClickListener{
+
+        binding.closeImg.setOnClickListener {
             findNavController().navigateUp()
         }
     }

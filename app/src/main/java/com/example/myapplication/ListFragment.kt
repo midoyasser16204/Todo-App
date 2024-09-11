@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.FragmentListBinding
 
 class ListFragment : Fragment() {
-    lateinit var binding: FragmentListBinding
-    private val userViewModel: ViewModel by activityViewModels()
+    private lateinit var binding: FragmentListBinding
+    private val viewModel: ViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentListBinding.inflate(layoutInflater)
+    ): View {
+        binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -26,31 +27,31 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = UserDataAdapter(
-            (userViewModel.allUser.value ?: mutableListOf()).toMutableList(),
+            (viewModel.allUser.value ?: emptyList()).toMutableList(),
             { userData ->
-                userViewModel.delete(userData)
+                viewModel.delete(userData)
             },
             { userData ->
-                val position = userViewModel.allUser.value?.indexOf(userData) ?: -1
                 findNavController().navigate(R.id.editFragment, bundleOf(
-                    "title" to userData.title,
-                    "description" to userData.description,
-                    "position" to position
+                    "userId" to userData.id
                 ))
             },
             { userData ->
                 findNavController().navigate(R.id.detailedFragment, bundleOf(
                     "user" to userData
                 ))
-            })
+            }
+        )
 
         binding.list.apply {
             layoutManager = LinearLayoutManager(requireContext())
             this.adapter = adapter
         }
-        userViewModel.allUser.observe(viewLifecycleOwner) { list ->
+
+        viewModel.allUser.observe(viewLifecycleOwner) { list ->
             adapter.updateData(list)
         }
+
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(R.id.addFragment)
         }
@@ -58,15 +59,16 @@ class ListFragment : Fragment() {
         arguments?.let {
             val title = it.getString("title")
             val description = it.getString("description")
-            val position = it.getInt("position", -1)
-            if (position != -1 && position < (userViewModel.allUser.value?.size ?: 0)) {
-                val existingUser = userViewModel.allUser.value?.get(position)
+            val userId = it.getInt("userId", -1)
+
+            if (userId != -1) {
+                val existingUser = viewModel.allUser.value?.find { it.id == userId }
                 existingUser?.let {
-                    userViewModel.update(it.copy(title = title, description = description))
+                    viewModel.update(it.copy(title = title, description = description))
                 }
             }
             else {
-                userViewModel.insert(UserData(title = title, description = description))
+                viewModel.insert(UserData(title = title, description = description))
             }
             requireArguments().clear()
         }

@@ -33,4 +33,9 @@ class ViewModel (application: Application): AndroidViewModel(application) {
         fun delete(user: UserData)= viewModelScope.launch{
             userRepo.deleteUser(user)
         }
+
+        fun getUserById(id: Int): UserData? {
+            return allUser.value?.find { it.id == id }
+        }
+
     }

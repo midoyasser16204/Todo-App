@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-@Database(entities = [UserData::class], version = 2)
+
+@Database(entities = [UserData::class], version = 1)
 abstract class AppDataBase:RoomDatabase() {
     abstract fun getData():UserDao
     companion object{
