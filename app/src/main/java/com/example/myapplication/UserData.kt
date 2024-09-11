@@ -1,12 +1,12 @@
 package com.example.myapplication
 
-import android.icu.text.Transliterator.Position
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-import java.io.FileDescriptor
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
+@Entity(tableName = "user_table")
 data class UserData(
-    var title:String,
-    var description:String
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val title: String?,
+    val description: String?
 ):Serializable

@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ItemLayoutBinding
 
@@ -38,9 +39,12 @@ import com.example.myapplication.databinding.ItemLayoutBinding
 
      override fun getItemCount()=userlist.size
 
-     fun updateData(newList: MutableList<UserData>?) {
-         userlist = newList ?: mutableListOf()
-         notifyDataSetChanged()
+     fun updateData(newList: List<UserData>) {
+         val diffCallback = AlbumDiffUtil(userlist, newList)
+         val diffResult = DiffUtil.calculateDiff(diffCallback)
+         userlist.clear()
+         userlist.addAll(newList)
+         diffResult.dispatchUpdatesTo(this)
      }
 
     }

@@ -1,40 +1,36 @@
 package com.example.myapplication
 
+import android.app.Application
 import android.icu.text.Transliterator.Position
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.ViewModelFactoryDsl
+import kotlinx.coroutines.launch
 
-class ViewModel: ViewModel() {
-    private var _userList = MutableLiveData<MutableList<UserData>>()
-    val userList:MutableLiveData<MutableList<UserData>> get() = _userList
+class ViewModel (application: Application): AndroidViewModel(application) {
 
-    init {
-            _userList.value = mutableListOf(
-                UserData("ahmed", "ahmed@gmail.com"),
-                UserData("s", "sssw@gmail.com")
-            )
-    }
+        private val userRepo:UserRepo
 
-    fun addtolist(userData: UserData){
-        val list = userList.value?: mutableListOf()
-        list.add(userData)
-        _userList.value=list
-    }
+        val allUser: LiveData<List<UserData>>
 
-    fun removefromlist(userData: UserData){
-        val list = userList.value?: mutableListOf()
-        list.remove(userData)
-        _userList.value=list
-    }
+        init {
+            val userDao = AppDataBase.getDataBase(application).getData()
+            userRepo = UserRepo(userDao)
+            allUser = userRepo.allUser
+        }
 
-    fun updatelist(userData: UserData,position: Int){
-        val list = userList.value?: mutableListOf()
-        if (list != null) {
-            if (position in list.indices){
-                list[position] = userData
-                _userList.value=list
-            }
+        fun insert(user: UserData)= viewModelScope.launch{
+            userRepo.insertUser(user)
+        }
+
+        fun update(user: UserData)= viewModelScope.launch{
+            userRepo.updateUser(user)
+        }
+
+        fun delete(user: UserData)= viewModelScope.launch{
+            userRepo.deleteUser(user)
         }
     }
-
-}
