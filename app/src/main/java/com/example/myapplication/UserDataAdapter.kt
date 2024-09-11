@@ -40,11 +40,10 @@ import com.example.myapplication.databinding.ItemLayoutBinding
      override fun getItemCount()=userlist.size
 
      fun updateData(newList: List<UserData>) {
-         val diffCallback = AlbumDiffUtil(userlist, newList)
+         val diffCallback = DiffUtil(userlist, newList)
          val diffResult = DiffUtil.calculateDiff(diffCallback)
          userlist.clear()
          userlist.addAll(newList)
          diffResult.dispatchUpdatesTo(this)
      }
-
     }
