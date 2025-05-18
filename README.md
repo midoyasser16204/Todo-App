@@ -37,7 +37,25 @@ This Android application demonstrates basic CRUD (Create, Read, Update, Delete) 
 
 ## Project Structure
 
-<pre lang="nohighlight"> ``` ├── AddFragment.kt ├── EditFragment.kt ├── DetailedFragment.kt ├── ListFragment.kt ├── ViewModel.kt ├── UserData.kt ├── UserDataAdapter.kt ├── res/ │ ├── layout/ │ │ ├── fragment_add.xml │ │ ├── fragment_edit.xml │ │ ├── fragment_detailed.xml │ │ ├── fragment_list.xml │ └── navigation/ │ └── nav_graph.xml ``` </pre>
+```
+
+├── AddFragment.kt
+├── EditFragment.kt
+├── DetailedFragment.kt
+├── ListFragment.kt
+├── ViewModel.kt
+├── UserData.kt
+├── UserDataAdapter.kt
+├── res/
+│ ├── layout/
+│ │ ├── fragment_add.xml
+│ │ ├── fragment_edit.xml
+│ │ ├── fragment_detailed.xml
+│ │ ├── fragment_list.xml
+│ └── navigation/
+│ └── nav_graph.xml
+
+```
 
 pgsql
 Copy
